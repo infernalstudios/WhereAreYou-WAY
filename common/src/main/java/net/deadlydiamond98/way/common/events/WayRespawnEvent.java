@@ -24,5 +24,7 @@ public class WayRespawnEvent {
 
         newWay.way$setFocusedColor(oldWay.way$getFocusedColor());
         newWay.way$setFocusedPlayerNames(oldWay.way$getFocusedPlayerNames());
+
+        WayTickingEvent.resyncPlayer = true;
     }
 }

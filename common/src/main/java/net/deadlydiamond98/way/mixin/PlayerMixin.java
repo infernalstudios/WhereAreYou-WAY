@@ -1,5 +1,6 @@
 package net.deadlydiamond98.way.mixin;
 
+import net.deadlydiamond98.way.Way;
 import net.deadlydiamond98.way.common.command.WayServerCommands;
 import net.deadlydiamond98.way.platform.Service;
 import net.deadlydiamond98.way.util.mixin.IWayPlayer;
@@ -8,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

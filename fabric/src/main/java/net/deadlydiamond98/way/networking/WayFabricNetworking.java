@@ -21,7 +21,6 @@ public class WayFabricNetworking {
     public static final ResourceLocation CLEAR_PLAYERS_PACKET = new ResourceLocation(Way.MOD_ID, "clear_players");
     public static final ResourceLocation UPDATE_NAMEPLATE_RENDER_PACKET = new ResourceLocation(Way.MOD_ID, "update_nameplate_render");
 
-
     public static class Client {
         public static void registerS2CPackets() {
             ClientPlayNetworking.registerGlobalReceiver(UPDATE_PLAYER_PACKET, WayFabricNetworking.Client::recievePlayerList);

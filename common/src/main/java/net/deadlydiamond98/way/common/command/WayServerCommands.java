@@ -93,6 +93,12 @@ public class WayServerCommands {
     private static final AbstractWayCommand SEE_OUTLINE_ADMIN = new SeeCommand(2, "outline",
             (player, bool) -> ((IWayPlayer) player).way$setSeeOutline(bool)
     );
+    private static final AbstractWayCommand SEE_HEAD_ADMIN = new SeeCommand(2, "head",
+            (player, bool) -> ((IWayPlayer) player).way$setSeeHead(bool)
+    );
+    private static final AbstractWayCommand SEE_HEAD_OUTLINE_ADMIN = new SeeCommand(2, "headOutline",
+            (player, bool) -> ((IWayPlayer) player).way$setSeeHeadOutline(bool)
+    );
     private static final AbstractWayCommand SEE_SELF_ADMIN = new SeeCommand(2, "self",
             (player, bool) -> ((IWayPlayer) player).way$setSeeSelf(bool)
     );

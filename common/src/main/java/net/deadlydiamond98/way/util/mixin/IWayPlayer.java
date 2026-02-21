@@ -31,7 +31,6 @@ public interface IWayPlayer {
     void way$setFocusedColor(@Nullable Integer color);
     @Nullable Integer way$getFocusedColor();
 
-
     void way$updateRenderPreferences();
 
     void way$setSeeName(boolean bool);

@@ -20,7 +20,6 @@ public class WayKeybindings {
                 if (!hasFired) {
                     hasFired = true;
                     renderNameOverlayToggle = !renderNameOverlayToggle;
-                    Way.LOGGER.info("KeyBinding Pressed, the overlay is now: {}", renderNameOverlayToggle);
                 }
             } else {
                 hasFired = false;

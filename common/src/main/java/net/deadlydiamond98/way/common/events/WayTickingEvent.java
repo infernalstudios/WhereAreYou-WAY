@@ -5,10 +5,10 @@ import net.deadlydiamond98.way.platform.Service;
 import net.deadlydiamond98.way.util.PlayerLocation;
 import net.deadlydiamond98.way.util.mixin.IWayPlayer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
@@ -18,25 +18,45 @@ import java.util.List;
 public class WayTickingEvent {
     public static final List<PlayerLocation> PLAYER_POS = new ArrayList<>();
     private static final int UPDATE_RATE = 5;
+    public static boolean resyncPlayer = false;
+    public static int resyncDelay = 0;
+    private static int resyncTimer = 0;
 
-    public static void tick(Level level) {
-        List<Player> toRender = new ArrayList<>();
-        level.players().forEach(player -> {
-            if (!player.isInvisible()) {
-                toRender.add(player);
-            }
-        });
-        level.players().forEach(sender -> {
-            int rate = Math.max(1, WayServerCommands.PACKET_UPDATE_RATE.getValue(sender));
-            if (sender.tickCount % rate == 0) {
-                Service.PLATFORM.sendS2CClearPacket((ServerPlayer) sender);
-                for (Player player : toRender) {
-                    if (canRenderNameplate(sender, player)) {
-                        Service.PLATFORM.sendS2CPlayerList((ServerPlayer) sender, player);
+    public static void tick(MinecraftServer server) {
+        server.getAllLevels().forEach(level -> {
+            List<Player> toRender = new ArrayList<>();
+            level.players().forEach(player -> {
+                if (!player.isInvisible()) {
+                    toRender.add(player);
+                }
+            });
+            level.players().forEach(sender -> {
+                int rate = Math.max(1, WayServerCommands.PACKET_UPDATE_RATE.getValue(sender));
+                if (sender.tickCount % rate == 0) {
+                    Service.PLATFORM.sendS2CClearPacket(sender);
+                    for (Player player : toRender) {
+                        if (canRenderNameplate(sender, player)) {
+                            Service.PLATFORM.sendS2CPlayerList(sender, player);
+                        }
                     }
                 }
-            }
+            });
         });
+
+        // Used to Sync Data in Fabric due to some methods acting a bit different
+        if (resyncPlayer) {
+            if (resyncTimer++ > resyncDelay) {
+                server.getAllLevels().forEach(level ->
+                        level.players().forEach(serverPlayer ->
+                                ((IWayPlayer) serverPlayer).way$updateRenderPreferences()
+                        )
+                );
+                resyncPlayer = false;
+            }
+        } else {
+            resyncTimer = 0;
+            resyncDelay = 0;
+        }
     }
 
     private static boolean canRenderNameplate(Player sender, Player player) {

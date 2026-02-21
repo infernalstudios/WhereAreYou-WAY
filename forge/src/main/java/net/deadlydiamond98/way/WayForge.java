@@ -33,10 +33,9 @@ public class WayForge {
     @Mod.EventBusSubscriber(modid = Way.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class TickEvents {
         @SubscribeEvent
-        public static void tickEvents(TickEvent.LevelTickEvent event) {
+        public static void tickEvents(TickEvent.ServerTickEvent event) {
             if (event.phase == TickEvent.Phase.END || event.side == LogicalSide.CLIENT) return;
-            Level level = event.level;
-            WayTickingEvent.tick(level);
+            WayTickingEvent.tick(event.getServer());
         }
 
         @SubscribeEvent
@@ -51,6 +50,11 @@ public class WayForge {
 
         @SubscribeEvent
         public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+            ((IWayPlayer) event.getEntity()).way$updateRenderPreferences();
+        }
+
+        @SubscribeEvent
+        public static void onPlayerChangeDimensions(PlayerEvent.PlayerChangedDimensionEvent event) {
             ((IWayPlayer) event.getEntity()).way$updateRenderPreferences();
         }
     }
